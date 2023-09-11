@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3333
-# @name create_account
+@authToken = {{authenticate.response.body.access_token}}
 POST {{baseUrl}}/accounts
 Content-Type: application/json
 
@@ -10,8 +10,6 @@ Content-Type: application/json
 }
 
 ###
-
-@baseUrl = http://localhost:3333
 # @name authenticate
 POST {{baseUrl}}/sessions
 Content-Type: application/json
@@ -20,3 +18,20 @@ Content-Type: application/json
 	"email": "natan@gmail.com",
 	"password": "123123"
 }
+###
+
+# @name create_question
+POST {{baseUrl}}/questions
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+	"title": "Como sobreviver a vida de dev2?",
+	"content": "Trabalho igual corno todo dia"
+}
+###
+
+# @name fetch_recente_questions
+GET {{baseUrl}}/questions?page=2
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
