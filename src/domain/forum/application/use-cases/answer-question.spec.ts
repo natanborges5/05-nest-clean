@@ -1,6 +1,4 @@
 import { AnswerQuestionUseCase } from "./answer-question"
-import { AnswerRepository } from "../repositories/answers-repository"
-import { Answer } from "../../enterprise/entities/answer"
 import { InMemoryAnswersRepository } from "test/repositories/in-memory-answers-repository"
 import { UniqueEntityID } from "@/core/entities/unique-entity-id"
 import { InMemoryAnswerAttachmentsRepository } from "test/repositories/in-memory-answer-attachments-repository"

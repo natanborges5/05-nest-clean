@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Post, Query, UseGuards, UsePipes } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Get, HttpCode, Post, Query, UseGuards, UsePipes } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
 import {z} from "zod"
@@ -23,7 +23,7 @@ export class QuestionController {
     async handleFetchRecentQuestions(@Query("page", queryValidationPipe) page: PageQueryParamSchema){
       const result = await this.fetchRecentQuestions.execute({page})
       if(result.isLeft()){
-        throw new Error()
+        throw new BadRequestException()
       }
       const questions = result.value.questions
       return {
@@ -36,11 +36,14 @@ export class QuestionController {
     async handlePostQuestion(@CurrentUser() user: UserPayload, @Body(new ZodValidationPipe(questionSchema)) body: QuestionBodySchema){
         const {title, content} = body
         const userId = user.sub
-        await this.createQuestion.execute({
+        const result = await this.createQuestion.execute({
           title,
           content,
           authorId: userId,
           attachmentsIds: []
         })
+        if(result.isLeft()){
+          throw new BadRequestException()
+        }
     }
 }
