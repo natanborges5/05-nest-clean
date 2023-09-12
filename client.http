@@ -26,12 +26,12 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-	"title": "Como sobreviver a vida de dev2?",
+	"title": "Como sobreviver a vida de developer2?",
 	"content": "Trabalho igual corno todo dia"
 }
 ###
 
 # @name fetch_recente_questions
-GET {{baseUrl}}/questions?page=2
+GET {{baseUrl}}/questions?page=1
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
