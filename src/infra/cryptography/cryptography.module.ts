@@ -8,11 +8,11 @@ import { HashGenerator } from '@/domain/forum/application/cryptography/hasher-ge
 import { BcryptHasher } from './bcrypt-hasher.ts'
 
 @Module({
-  providers: [
-    { provide: Encrypter, useClass: JwtEncrypter },
-    { provide: HashComparer, useClass: BcryptHasher },
-    { provide: HashGenerator, useClass: BcryptHasher },
-  ],
-  exports: [Encrypter, HashComparer, HashGenerator],
+    providers: [
+        { provide: Encrypter, useClass: JwtEncrypter },
+        { provide: HashComparer, useClass: BcryptHasher },
+        { provide: HashGenerator, useClass: BcryptHasher },
+    ],
+    exports: [Encrypter, HashComparer, HashGenerator],
 })
 export class CryptographyModule {}

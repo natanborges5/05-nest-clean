@@ -1,13 +1,15 @@
-import { PaginationParams } from "@/core/repositories/pagination-params";
-import { QuestionCommentsRepository } from "@/domain/forum/application/repositories/question-comments-repository";
-import { QuestionComment } from "@/domain/forum/enterprise/entities/question-comment";
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma.service";
-import { PrismaQuestionCommentMapper } from "../mappers/prisma-question-comment-mapper";
+import { PaginationParams } from '@/core/repositories/pagination-params'
+import { QuestionCommentsRepository } from '@/domain/forum/application/repositories/question-comments-repository'
+import { QuestionComment } from '@/domain/forum/enterprise/entities/question-comment'
+import { Injectable } from '@nestjs/common'
+import { PrismaService } from '../prisma.service'
+import { PrismaQuestionCommentMapper } from '../mappers/prisma-question-comment-mapper'
 
 @Injectable()
-export class PrismaQuestionCommentsRepository implements QuestionCommentsRepository {
-    constructor(private prisma: PrismaService) { }
+export class PrismaQuestionCommentsRepository
+    implements QuestionCommentsRepository
+{
+    constructor(private prisma: PrismaService) {}
 
     async create(questionComment: QuestionComment): Promise<void> {
         const data = PrismaQuestionCommentMapper.toPrisma(questionComment)
@@ -19,32 +21,34 @@ export class PrismaQuestionCommentsRepository implements QuestionCommentsReposit
         const questionComment = await this.prisma.comment.findUnique({
             where: {
                 id,
-            }
+            },
         })
-        if(!questionComment){
+        if (!questionComment) {
             return null
         }
         return PrismaQuestionCommentMapper.toDomain(questionComment)
     }
-    async findManyByQuestionId(questionId: string, {page}: PaginationParams): Promise<QuestionComment[]> {
+    async findManyByQuestionId(
+        questionId: string,
+        { page }: PaginationParams,
+    ): Promise<QuestionComment[]> {
         const questions = await this.prisma.comment.findMany({
             where: {
-                questionId
+                questionId,
             },
             orderBy: {
-                createdAt: "desc"
+                createdAt: 'desc',
             },
             take: 20,
-            skip: (page - 1) * 20
+            skip: (page - 1) * 20,
         })
         return questions.map(PrismaQuestionCommentMapper.toDomain)
     }
     async delete(questionComment: QuestionComment): Promise<void> {
         await this.prisma.comment.delete({
             where: {
-                id: questionComment.id.toString()
+                id: questionComment.id.toString(),
             },
         })
     }
-
 }
